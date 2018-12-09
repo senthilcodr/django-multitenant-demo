@@ -99,8 +99,8 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'tenant_schemas.postgresql_backend',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'NAME': 'test',
+        'USER': 'test',
         'PASSWORD': 'test1234',
         'HOST': 'localhost',
         'PORT': '',        
