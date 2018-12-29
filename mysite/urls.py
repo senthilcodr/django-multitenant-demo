@@ -17,11 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers
-from companies import views
+from companies.views import CompanyViewSet
+from employees.views import EmployeeViewSet
 
 router = routers.DefaultRouter()
-router.register(r'companies', views.CompanyViewSet)
-router.register(r'employees', views.EmployeeViewSet)
+router.register(r'companies', CompanyViewSet)
+router.register(r'employees', EmployeeViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

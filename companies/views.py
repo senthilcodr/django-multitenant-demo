@@ -1,11 +1,14 @@
 from rest_framework import viewsets
-from .models import Company, Employee
-from .serializers import CompanySerializer, EmployeeSerializer
+from .models import Company
+from .serializers import CompanySerializer
 from rest_framework import permissions
-from .permissions import IsCompanyAdmin, IsSuperAdmin
+from rest_framework.response import Response
+from rest_framework import status
+#from .permissions import IsCompanyAdmin, IsSuperAdmin
 from django.contrib.auth.models import User
 from tenant_schemas.utils import schema_context
-
+from employees.models import Employee
+from django.conf import settings
 
 class CompanyViewSet(viewsets.ModelViewSet):
     """
@@ -18,40 +21,13 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         name = request.data['name']
-        schema_name = request.data['schema_name']
-        domain_url = request.data['domain_url']
+        schema_name = name
+        domain_url = name + settings.DOMAIN_NAME
         company = Company(name=name, schema_name=schema_name, domain_url=domain_url)
         company.save()
-        #with schema_context(company.schema_name):
-        #    user = User.objects.create_user(username='company_admin', password='test1234')
-        #    employee = Employee(name='company_admin', is_company_admin=True, company=company, user=user)
-        #    employee.save()
+        with schema_context(company.schema_name):
+            user = User.objects.create_user(username='company_admin', password='test1234')
+            employee = Employee(name='company_admin', is_company_admin=True, user=user)
+            employee.save()
 
-class EmployeeViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows employee to be viewed or edited.
-    """
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
-    #permission_classes = (permissions.IsAuthenticated, IsCompanyAdminOrUser) 
-
-    def create(self, request):
-        name = request.data['name']
-        schema_name = request.data['schema_name']
-        user = User.objects.create_user(username=name, password='test1234')
-        is_company_admin = False
-        num_users = User.objects.filter().count()
-        if num_users == 1:
-            is_company_admin = True
-        employee = Employee(name='company_admin', is_company_admin=True, company=company, user=user)
-        employee.save()
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action in ('create', 'destroy'):
-            permission_classes = [IsCompanyAdmin]
-        else:
-            permission_classes = [IsUserSelf]
-        return [permission() for permission in permission_classes]
+        return Response(status=status.HTTP_201_CREATED)

@@ -32,30 +32,36 @@ ALLOWED_HOSTS = []
 
 SHARED_APPS = [
     'tenant_schemas',
-    'companies',
-    'rest_framework',
-    #'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-]
-
-TENANT_APPS = [
-    'django.contrib.contenttypes',
-]
-
-INSTALLED_APPS = [
-    'tenant_schemas',
-    'companies',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    #'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'companies',
+]
+
+TENANT_APPS = [
+    #'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'employees',
+]
+
+INSTALLED_APPS = [
+    'tenant_schemas',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    #'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'companies',
+    'employees',
 ]
 
 TENANT_MODEL = "companies.Company"
@@ -149,7 +155,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-ALLOWED_HOSTS = ['.domain.com', 'localhost', '127.0.0.1']
+DOMAIN_NAME = '.domain.com'
+ALLOWED_HOSTS = [DOMAIN_NAME]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
