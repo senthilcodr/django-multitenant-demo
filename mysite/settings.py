@@ -68,7 +68,8 @@ TENANT_MODEL = "companies.Company"
 DEFAULT_FILE_STORAGE = 'tenant_schemas.storage.TenantFileSystemStorage'
 
 MIDDLEWARE = [
-    'tenant_schemas.middleware.TenantMiddleware',
+    #'tenant_schemas.middleware.TenantMiddleware',
+    'mysite.middleware.HeaderTenantMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
