@@ -156,7 +156,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-DOMAIN_NAME = '.domain.com'
+DOMAIN_NAME = '.ec2-13-126-71-105.ap-south-1.compute.amazonaws.com'
 ALLOWED_HOSTS = [DOMAIN_NAME]
 
 REST_FRAMEWORK = {
