@@ -16,8 +16,25 @@ class IsCompanyAdmin(permissions.BasePermission):
         try:
             employee = Employee.objects.get(user__id=request.user.id)
         except Employee.DoesNotExist:
-            print("Does Not Exist")
             return False
+        return employee.is_company_admin
+
+class IsSameCompany(permissions.BasePermission):
+    """
+    Custom permission to only allow same company users.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        try:
+            employee = Employee.objects.get(user__id=obj.user.id)
+        except Employee.DoesNotExist:
+            return False
+
+        try:
+            request_employee = Employee.objects.get(user__id=request.user.id)
+        except Employee.DoesNotExist:
+            return False
+
         return employee.is_company_admin
 
 class IsUserSelf(permissions.BasePermission):

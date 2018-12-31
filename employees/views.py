@@ -29,11 +29,29 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_201_CREATED)
 
+    @action(detail=True, methods=['post'], name='Invite to Team')
+    def invite_to_team(self, request, pk=None):
+        emp_id = request.data['emp_id']
+        team_id = request.data['team_id']
+
+        try:
+            employee = Employee.objects.get(id=emp_id)
+        except Employee.DoesNotExist:
+            return Response(message='Invalid employee id.', status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            team = Team.objects.get(id=team_id)
+        except Team.DoesNotExist:
+            return Response(message='Invalid team id.', status=status.HTTP_400_BAD_REQUEST)
+
+
+        return Response(message='Employee invited to team.', status=status.HTTP_200_OK)
+
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action in ('create', 'destroy', 'list'):
+        if self.action in ('create', 'destroy', 'list', 'invite_to_team'):
             permission_classes = [permissions.IsAuthenticated, IsCompanyAdmin]
         else:
             permission_classes = [permissions.IsAuthenticated, IsUserSelf]
