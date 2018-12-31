@@ -6,6 +6,7 @@ from .permissions import IsCompanyAdmin, IsSuperAdmin, IsUserSelf
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     """
