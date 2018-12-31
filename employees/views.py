@@ -48,6 +48,20 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
         return Response(message='Employee invited to team.', status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['post'], name='Invite to Company')
+    def invite_to_company(self, request, pk=None):
+        emp_id = request.data['emp_id']
+        company_from = request.data['company_from']
+
+        # TODO: Validate schema name
+        with schema_context(company_from):
+            try:
+                employee = Employee.objects.get(id=emp_id)
+            except Employee.DoesNotExist:
+                return Response(message='Invalid employee id.', status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(message='Employee invited to company.', status=status.HTTP_200_OK)
+
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
