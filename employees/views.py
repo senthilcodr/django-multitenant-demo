@@ -27,7 +27,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee = Employee(name=name, user=user, address=address)
         employee.save()
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(data="Employee successfully added.", status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['post'], name='Invite to Team')
     def invite_to_team(self, request, pk):
