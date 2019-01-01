@@ -32,7 +32,10 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], name='Invite to Team')
     def invite_to_team(self, request, pk):
         employee = self.get_object()
-        team_id = request.data['team_id']
+        if 'team_id' in request.data:
+            team_id = request.data['team_id']
+        else:
+            return Response(data="Required parameter 'team_id' is missing", status=status.HTTP_400_BAD_REQUEST)
 
         try:
             team = Team.objects.get(id=team_id)
@@ -46,8 +49,15 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], name='Invite to Company')
     def invite_to_company(self, request):
-        emp_id = request.data['emp_id']
-        company_from = request.data['company_from']
+        if 'emp_id' in request.data:
+            emp_id = request.data['emp_id']
+        else:
+            return Response(data="Required parameter 'emp_id' is missing", status=status.HTTP_400_BAD_REQUEST)
+
+        if 'company_from' in request.data:
+            company_from = request.data['company_from']
+        else:
+            return Response(data="Required parameter 'company_from' is missing", status=status.HTTP_400_BAD_REQUEST)
 
         if company_from == connection.schema_name:
             return Response(data='Cannot invite employee from same company.', status=status.HTTP_400_BAD_REQUEST)
