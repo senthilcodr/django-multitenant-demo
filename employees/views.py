@@ -38,15 +38,15 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         try:
             employee = Employee.objects.get(id=emp_id)
         except Employee.DoesNotExist:
-            return Response(message='Invalid employee id.', status=status.HTTP_400_BAD_REQUEST)
+            return Response(data='Invalid employee id.', status=status.HTTP_400_BAD_REQUEST)
 
         try:
             team = Team.objects.get(id=team_id)
         except Team.DoesNotExist:
-            return Response(message='Invalid team id.', status=status.HTTP_400_BAD_REQUEST)
+            return Response(data='Invalid team id.', status=status.HTTP_400_BAD_REQUEST)
 
 
-        return Response(message='Employee invited to team.', status=status.HTTP_200_OK)
+        return Response(data='Employee invited to team.', status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], name='Invite to Company')
     def invite_to_company(self, request, pk=None):
@@ -58,9 +58,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             try:
                 employee = Employee.objects.get(id=emp_id)
             except Employee.DoesNotExist:
-                return Response(message='Invalid employee id.', status=status.HTTP_400_BAD_REQUEST)
+                return Response(data='Invalid employee id.', status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(message='Employee invited to company.', status=status.HTTP_200_OK)
+        return Response(data='Employee invited to company.', status=status.HTTP_200_OK)
 
     def get_permissions(self):
         """
