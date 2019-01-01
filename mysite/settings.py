@@ -156,9 +156,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#DOMAIN_NAME = '.ec2-13-126-71-105.ap-south-1.compute.amazonaws.com'
-DOMAIN_NAME = '.domain.com'
-ALLOWED_HOSTS = [DOMAIN_NAME]
+DOMAIN_NAME = '.ec2-13-126-71-105.ap-south-1.compute.amazonaws.com'
+LOCAL_DOMAIN_NAME = '.domain.com'
+ALLOWED_HOSTS = [LOCAL_DOMAIN_NAME, DOMAIN_NAME]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
