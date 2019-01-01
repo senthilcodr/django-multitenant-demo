@@ -14,18 +14,13 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
-    #permission_classes = (permissions.IsAuthenticated, IsCompanyAdminOrUser) 
 
     def create(self, request):
         name = request.data['name']
-        #schema_name = request.data['schema_name']
+        address = request.data['address']
+            
         user = User.objects.create_user(username=name, password='test1234')
-        #is_company_admin = False
-        #num_users = User.objects.filter().count()
-        #if num_users == 1:
-        #    is_company_admin = True
-        #employee = Employee(name='company_admin', is_company_admin=True, company=company, user=user)
-        employee = Employee(name=name, user=user)
+        employee = Employee(name=name, user=user, address=address)
         employee.save()
 
         return Response(status=status.HTTP_201_CREATED)

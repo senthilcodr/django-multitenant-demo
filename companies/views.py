@@ -25,14 +25,20 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
         schema_name = name
         domain_url = name + settings.DOMAIN_NAME
-        company = Company(name=name, schema_name=schema_name, domain_url=domain_url, 
-                address=address)
-        company.auto_drop_schema = True
-        company.save()
+        try:
+            company = Company(name=name, schema_name=schema_name, domain_url=domain_url, 
+                    address=address)
+            # This option does not seem to work.  The schemas are not deleted when company is deleted.
+            company.auto_drop_schema = True
+            company.save()
+        except Exception as e:
+            return Response(data='Unable to create Companay with the given input.', status=status.HTTP_400_BAD_REQUEST)
 
+        # Create company admin user in the tenant/company schema
         with schema_context(company.schema_name):
-            user = User.objects.create_user(username='company_admin', password='test1234')
-            employee = Employee(name='company_admin', is_company_admin=True, user=user)
+            company_admin_name = company.schema_name + '_admin'
+            user = User.objects.create_user(username=company_admin_name, password='test1234')
+            employee = Employee(name=company_admin_name, is_company_admin=True, user=user)
             employee.save()
 
         return Response(data='Company successfully created.', status=status.HTTP_201_CREATED)
