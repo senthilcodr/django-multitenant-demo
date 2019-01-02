@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from .models import Employee, Team
 from .serializers import EmployeeSerializer, TeamSerializer
 from rest_framework import permissions
-from .permissions import IsCompanyAdmin, IsSuperAdmin, IsUserSelf
+from .permissions import IsCompanyAdmin, IsUserSelf
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,11 +13,9 @@ from tenant_schemas.utils import get_public_schema_name
 from django.db import connection
 
 class EmployeeViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows employee to be viewed or edited.
-    """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
 
     def create(self, request):
         name = request.data['name']
@@ -28,6 +26,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.save()
 
         return Response(data="Employee successfully added.", status=status.HTTP_201_CREATED)
+    
 
     @action(detail=True, methods=['post'], name='Invite to Team')
     def invite_to_team(self, request, pk):
@@ -46,6 +45,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             return Response(data='Employee already belongs to this team.', status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data='Employee invited to team.', status=status.HTTP_200_OK)
+
 
     @action(detail=False, methods=['post'], name='Invite to Company')
     def invite_to_company(self, request):
@@ -74,10 +74,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
         return Response(data='Employee invited to company.', status=status.HTTP_200_OK)
 
+
     def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
         if self.action in ('create', 'destroy', 'list', 'invite_to_team', 'invite_to_company'):
             permission_classes = [permissions.IsAuthenticated, IsCompanyAdmin]
         else:
@@ -110,9 +108,6 @@ class TeamViewSet(viewsets.ModelViewSet):
         return Response(data="Team successfully created.", status=status.HTTP_201_CREATED)
 
     def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
         if self.action in ('list',):
             permission_classes = [permissions.IsAuthenticated]
         else:

@@ -10,25 +10,27 @@ from employees.models import Employee
 from django.conf import settings
 
 class CompanyViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows company to be viewed or edited.
-    """
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+    # AdminUser is the SuperAdmin
     permission_classes = (permissions.IsAdminUser,) 
 
     def create(self, request):
         name = request.data['name']
         address = request.data['address']
+
         if Company.objects.filter(name=name).exists():
             return Response(data='Companay with the same name already exists.', status=status.HTTP_400_BAD_REQUEST)
 
+        # Schema name is same as the company name
         schema_name = name
         domain_url = name + settings.DOMAIN_NAME
+
         try:
             company = Company(name=name, schema_name=schema_name, domain_url=domain_url, 
                     address=address)
-            # This option does not seem to work.  The schemas are not deleted when company is deleted.
+            # The option below is meant to clean up corresponding schema when a company is deleted.
+            # But this does not seem to work.
             company.auto_drop_schema = True
             company.save()
         except Exception as e:

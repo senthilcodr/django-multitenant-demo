@@ -5,6 +5,7 @@ class Employee(models.Model):
     name = models.CharField(max_length=100)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_company_admin = models.BooleanField(default=False)
+    # models.SET_NULL below makes sure employees remain when team is deleted
     belonging_team = models.ForeignKey('Team', on_delete=models.SET_NULL, blank=True, null=True)
     address = models.CharField(max_length=200)
 

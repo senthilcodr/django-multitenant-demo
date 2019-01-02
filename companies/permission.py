@@ -2,9 +2,6 @@ from rest_framework import permissions
 
 
 class IsCompanyAdminOrUser(permissions.BasePermission):
-    """
-    Custom permission to only allow same users to edit the the profile.
-    """
 
     def has_object_permission(self, request, view, obj):
         if obj.user == request.user:
